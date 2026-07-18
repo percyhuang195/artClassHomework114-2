@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/designRecords.dart';
 import 'package:app/previewImage.dart';
 import 'package:app/selectImage.dart';
 import 'package:flutter/material.dart';
+
+import 'dataClass.dart';
 
 void main() {
   runApp(const MyApp());
@@ -71,32 +74,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),),
                       Spacer(),
                       Spacer(),
-                      // Container(
-                      //   width: 20,
-                      //   height: 20,
-                      // ),
-                      // SizedBox(
-                      //   width: MediaQuery.of(context).size.width * 0.9,
-                      //   height: 40,
-                      //   child: ElevatedButton(
-                      //       style: ButtonStyle(
-                      //         backgroundColor:WidgetStatePropertyAll(Color.fromRGBO(251, 219, 149, 1)),
-                      //       ),
-                      //       onPressed: (){
-                      //         Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>designRecords()));
-                      //       }, child: Text(
-                      //     "檢視其他紀錄",style:
-                      //   TextStyle(
-                      //       fontSize: 18,
-                      //       color: Colors.black
-                      //   ),
-                      //   )
-                      //   ),
-                      // ),
-                      // Container(
-                      //   width: 20,
-                      //   height: 20,
-                      // ),
+                      Container(
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: 40,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:WidgetStatePropertyAll(Color.fromRGBO(251, 219, 149, 1)),
+                            ),
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>designRecords()));
+                            }, child: Text(
+                          "檢視其他紀錄",style:
+                        TextStyle(
+                            fontSize: 18,
+                            color: Colors.black
+                        ),
+                        )
+                        ),
+                      ),
+                      Container(
+                        width: 20,
+                        height: 20,
+                      ),
                     ],
                   ),
                 )

@@ -1,0 +1,118 @@
+[
+  {
+    "imageCount" : 1,
+    "layoutName" : "一張置中大圖",
+    "positionList" : [
+      {
+        "top": 25.0,
+        "left" : 25.0,
+        "width" : 250.0,
+        "height" : 250.0
+      }
+    ]
+  },
+  {
+    "imageCount" : 1,
+    "layoutName" : "一張貼邊大圖",
+    "positionList" : [
+      {
+        "top": 50.0,
+        "left" : 0.0,
+        "width" : 300.0,
+        "height" : 250.0
+      }
+    ]
+  },
+  {
+    "imageCount" : 1,
+    "layoutName" : "手機版截圖",
+    "positionList" : [
+      {
+        "top": 0.0,
+        "left" : 75.0,
+        "width" : 150.0,
+        "height" : 250.0
+      }
+    ]
+  },
+
+  {
+    "imageCount" : 2,
+    "layoutName" : "左右並排",
+    "positionList" : [
+      {
+        "top": 25.0,
+        "left" : 25.0,
+        "width" : 100.0,
+        "height" : 250.0
+      },
+      {
+        "top": 25.0,
+        "left" : 175.0,
+        "width" : 100.0,
+        "height" : 250.0
+      }
+    ]
+  },
+  {
+    "imageCount" : 2,
+    "layoutName" : "左上右下",
+    "positionList" : [
+      {
+        "top": 0.0,
+        "left" : 0.0,
+        "width" : 150.0,
+        "height" : 150.0
+      },
+      {
+        "top": 150.0,
+        "left" : 150.0,
+        "width" : 150.0,
+        "height" : 150.0
+      }
+    ]
+  },
+
+  {
+    "imageCount" : 3,
+    "layoutName" : "左中右",
+    "positionList" : [
+      {
+        "top": 0.0,
+        "left" : 0.0,
+        "width" : 100.0,
+        "height" : 200.0
+      },
+      {
+        "top": 50.0,
+        "left" : 100.0,
+        "width" : 100.0,
+        "height" : 200.0
+      },
+      {
+        "top": 100.0,
+        "left" : 200.0,
+        "width" : 100.0,
+        "height" : 200.0
+      }
+    ]
+  },
+  {
+    "imageCount" : 4,
+    "layoutName" : "左上右下",
+    "positionList" : [
+      {
+        "top": 0.0,
+        "left" : 0.0,
+        "width" : 150.0,
+        "height" : 150.0
+      },
+      {
+        "top": 150.0,
+        "left" : 150.0,
+        "width" : 150.0,
+        "height" : 150.0
+      }
+    ]
+  }
+]

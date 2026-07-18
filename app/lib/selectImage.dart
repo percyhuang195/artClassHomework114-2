@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/selectLayout.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -95,9 +96,15 @@ class _selectImageState extends State<selectImage> {
                   backgroundColor:WidgetStatePropertyAll(Color.fromRGBO(251, 219, 149, 1)),
                 ),
                 onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>designPage(images: selectedImages,)));
+                  if (selectedImages.length != 0){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>selectLayout(images: selectedImages,)));
+                  }else {
+                    var message = SnackBar(content: Text("請按右上角的 + 按鈕選擇圖片"));
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ScaffoldMessenger.of(context).showSnackBar(message);
+                  }
                 }, child: Text(
-              "開始設計",style:
+              "選擇版型",style:
             TextStyle(
                 fontSize: 18,
                 color: Colors.black

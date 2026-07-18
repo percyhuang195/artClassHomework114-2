@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class imageObject{
   double x = 0;
@@ -50,6 +53,72 @@ class textObject{
     this.scale = 1.0,
     this.rotation = 0.0,
   });
+}
+
+class imageLayout {
+  double top = 0.0;
+  double left = 0.0;
+  double width = 0.0;
+  double height = 0.0;
+
+  imageLayout({
+    required this.top,
+    required this.left,
+    required this.width,
+    required this.height,
+  });
+  imageLayout.fromJson(Map<String,dynamic> json)
+    : top = json["top"]!,
+    left = json["left"]!,
+    width = json["width"]!,
+    height = json["height"]!;
+}
+
+class layoutObject {
+  int imageCount = 0;
+  String layoutName = "";
+  List<dynamic> positionList = [];
+
+  layoutObject({
+    required this.imageCount,
+    required this.layoutName,
+    required this.positionList,
+  });
+
+  layoutObject.fromJson(Map<String,dynamic> json)
+    : imageCount = json["imageCount"],
+      layoutName = json["layoutName"],
+      positionList = json["positionList"];
+}
+
+
+class finalLayoutObject {
+  int imageCount = 0;
+  String layoutName = "";
+  List<dynamic> positionList = [];
+
+  finalLayoutObject({
+    required this.imageCount,
+    required this.layoutName,
+    required this.positionList,
+  });
+
+  finalLayoutObject.fromJson(Map<String,dynamic> json)
+      : imageCount = json["imageCount"],
+        layoutName = json["layoutName"],
+        positionList = json["positionList"];
+}
+
+Future<Directory> getExportDirectory() async {
+  final appDir = await getApplicationDocumentsDirectory();
+
+  final exportDir = Directory('${appDir.path}/exports');
+
+  if (!await exportDir.exists()) {
+    await exportDir.create(recursive: true);
+  }
+
+  return exportDir;
 }
 
 class DrawPainter extends CustomPainter {

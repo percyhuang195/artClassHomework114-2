@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:app/previewImage.dart';
 import 'package:flutter/material.dart';
+
+import 'dataClass.dart';
 
 class designRecords extends StatefulWidget {
   const designRecords({super.key});
@@ -9,6 +13,22 @@ class designRecords extends StatefulWidget {
 }
 
 class _designRecordsState extends State<designRecords> {
+
+  List<File> fileList = [];
+
+  Future<List<File>> loadHistoryImages() async {
+    final exportDir = await getExportDirectory();
+
+    final files = exportDir
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.png'))
+        .toList().reversed.toList();
+
+    return files;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,36 +39,25 @@ class _designRecordsState extends State<designRecords> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context,index){
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.width * 0.33,
-                      child: ListView.builder(
-                          itemCount: 3,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context,index){
-                            return Container(
-                              width: MediaQuery.of(context).size.width * 0.33,
-                              height: MediaQuery.of(context).size.width * 0.33,
-                              color: Colors.white,
-                              child:Center(
-                                child: GestureDetector(
-                                  onTap: (){
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>previewImage(imageId: 0,)));
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.28,
-                                    height: MediaQuery.of(context).size.width * 0.28,
-                                    color: Color.fromRGBO(217, 217, 217, 1),
-                                  ),
-                                ),
-                              )
-                            );
-                          }),
-                    );
-                }),
+            child:
+              FutureBuilder(future: loadHistoryImages(), builder: (context,snapshot){
+                if (!snapshot.hasData){
+                  return const CircularProgressIndicator();
+                }
+                final files = snapshot.data!;
+                return GridView.builder(
+                  itemCount: files.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                    itemBuilder: (context,index){
+                      return Padding(
+                        padding: EdgeInsets.all(4),
+                        child:Image.file(
+                          files[index],
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                });
+              })
           ),
         ],
       ),

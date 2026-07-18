@@ -9,16 +9,20 @@ import 'dataClass.dart';
 
 class designPage extends StatefulWidget {
   List<File> images = [];
+  List<finalLayoutObject> layoutList = [];
+  int selectedLayout = 0;
 
-  designPage({super.key, required this.images});
+  designPage({super.key, required this.images, required this.layoutList, required this.selectedLayout});
 
   @override
-  State<designPage> createState() => _designPageState(images: images);
+  State<designPage> createState() => _designPageState(images: images,layoutList: layoutList,selectedLayout:selectedLayout);
 }
 
 class _designPageState extends State<designPage> {
   List<File> images = [];
-  _designPageState({required this.images});
+  List<finalLayoutObject> layoutList = [];
+  int selectedLayout = 0;
+  _designPageState({required this.images, required this.layoutList, required this.selectedLayout});
 
   final GlobalKey repaintKey = GlobalKey();
   var inputController = TextEditingController();
@@ -28,7 +32,6 @@ class _designPageState extends State<designPage> {
     Icons.edit,
     Icons.text_fields,
     Icons.shape_line,
-    Icons.grid_3x3
   ];
 
   List<Color> colorList = [
@@ -55,20 +58,33 @@ class _designPageState extends State<designPage> {
   List<textObject> textList = [];
   int index = 0;
   List<paintPoint> points = [];
-  var selection = ["image","text"];
   var lastSelect = Map();
 
   @override
   void initState() {
     super.initState();
     for (int x = 0; x < images.length; x++) {
-      objectList.add(imageObject(
-          x: 100 * (x % 3).toDouble(),
-          y: 100 * (x / 3).toInt().toDouble(),
-          width: 100,
-          height: 100,
-          objectType: 0,
-          sourceIndex: x));
+      if (selectedLayout == -1){
+        objectList.add(imageObject(
+            x: 100 * (x % 3).toDouble(),
+            y: 100 * (x / 3).toInt().toDouble(),
+            width: 100,
+            height: 100,
+            objectType: 0,
+            sourceIndex: x
+          )
+        );
+      }else {
+        objectList.add(imageObject(
+            x: layoutList[selectedLayout].positionList[x].left,
+            y: layoutList[selectedLayout].positionList[x].top,
+            width:layoutList[selectedLayout].positionList[x].width,
+            height:layoutList[selectedLayout].positionList[x].height,
+            objectType: 0,
+            sourceIndex: x,
+          )
+        );
+      }
     }
     setState(() {});
   }
@@ -83,12 +99,13 @@ class _designPageState extends State<designPage> {
     return byteData!.buffer.asUint8List();
   }
 
-  Future<void> saveAndShare() async {
+  Future<void> saveExportImage() async {
     final bytes = await exportCanvasImage();
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/canvas.png');
+    final exportDir = await getExportDirectory();
+    final fileName =
+        'export_${DateTime.now().millisecondsSinceEpoch}.png';
+    final file = File('${exportDir.path}/$fileName');
     await file.writeAsBytes(bytes);
-
     await Share.shareXFiles([XFile(file.path)]);
   }
 
@@ -103,7 +120,7 @@ class _designPageState extends State<designPage> {
               Text("設計"),
               Spacer(),
               IconButton(onPressed: () {
-                saveAndShare();
+                saveExportImage();
               }, icon: Icon(Icons.save))
             ],
           ),
@@ -413,8 +430,8 @@ class _designPageState extends State<designPage> {
               child: RepaintBoundary(
                 key: repaintKey,
                 child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.width,
+                width: 300,
+                height: 300,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -422,8 +439,8 @@ class _designPageState extends State<designPage> {
                 child: Stack(
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width,
+                        width: 300,
+                        height: 300,
                         child: GestureDetector(
                           onPanUpdate: (details) {
                             setState(() {
@@ -441,10 +458,6 @@ class _designPageState extends State<designPage> {
                                 color: colorList[selectedColor],
                                 stop: true));
                           },
-                          child: CustomPaint(
-                            painter: DrawPainter(points),
-                            size: Size.infinite,
-                          ),
                         ),
                       ),
                       ...objectList.map((object) {
@@ -495,12 +508,13 @@ class _designPageState extends State<designPage> {
                                   height: object.height * object.scale,
                                   child: Image.file(
                                     images[object.sourceIndex],
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
                             ),
                           );
-                        }else if(object.objectType == 1 || object.objectType == 2) {
+                        }else if(object.objectType == 1 || object.objectType == 2 || object.objectType == 3) {
                           return Positioned(
                             left: object.x,
                             top: object.y,
@@ -542,15 +556,10 @@ class _designPageState extends State<designPage> {
                                 transform: Matrix4.identity()
                                   ..scale(object.scale)
                                   ..rotateZ(object.rotation),
-                                child: SizedBox(
-                                  width: object.width * object.scale,
-                                  height: object.height * object.scale,
-                                  child:Container(
-                                    decoration: BoxDecoration(
-                                      color: object.color,
-                                      shape: object.objectType == 2 ? BoxShape.circle : BoxShape.rectangle,
-                                    ),
-                                  ),
+                                child: Icon(
+                                  shapeList[object.objectType - 1],
+                                  color: object.color,
+                                  size: object.width * object.scale,
                                 ),
                               ),
                             ),
@@ -610,6 +619,14 @@ class _designPageState extends State<designPage> {
                           ),
                         );
                       }),
+                      SizedBox(
+                        width: 300,
+                        height: 300,
+                        child: CustomPaint(
+                          foregroundPainter: DrawPainter(points),
+                          size: Size.infinite,
+                        ),
+                      )
                     ],
                   ),
                 ),
